@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import tradingWebsite.example.TradingWebsite.DTO.ErrorControlDTO;
 import tradingWebsite.example.TradingWebsite.DTO.LoginRequestDTO;
 import tradingWebsite.example.TradingWebsite.DTO.RegisterRequestDTO;
+import tradingWebsite.example.TradingWebsite.DTO.UserResponseDTO;
 import tradingWebsite.example.TradingWebsite.Entity.UserEntity;
 import tradingWebsite.example.TradingWebsite.Services.UserAuthService;
 
@@ -30,7 +31,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDTO request){
 
-        UserEntity user=userAuth.saveUserEntity(request);
+        UserResponseDTO user=userAuth.saveUserEntity(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 

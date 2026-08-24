@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import tradingWebsite.example.TradingWebsite.DTO.LoginRequestDTO;
 import tradingWebsite.example.TradingWebsite.DTO.RegisterRequestDTO;
+import tradingWebsite.example.TradingWebsite.DTO.UserResponseDTO;
+
 import tradingWebsite.example.TradingWebsite.Entity.UserEntity;
+import tradingWebsite.example.TradingWebsite.Exceptions.EmailAlreadyExists;
 import tradingWebsite.example.TradingWebsite.Repository.UserRepository;
 
 @Service
@@ -18,9 +21,10 @@ public class UserAuthService {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passEncode;
-    public UserEntity saveUserEntity(RegisterRequestDTO request){
+    public UserResponseDTO saveUserEntity(RegisterRequestDTO request){
         if(userRepository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("This email already exists");
+            throw new EmailAlreadyExists("This email already exists");
+            // throw new RuntimeException("This email already exists");
         }
         
         UserEntity user=new UserEntity();
@@ -30,7 +34,15 @@ public class UserAuthService {
         user.setName(request.getName());
 
         UserEntity savedUser=userRepository.save(user);
-        return savedUser;
+        return new UserResponseDTO(
+         savedUser.getId(),
+         savedUser.getName(),
+         savedUser.getEmail(),
+         savedUser.getKycStatus(),
+         savedUser.getRole(),
+         savedUser.getCreatedAt()
+
+        );
     }
 
     // public UserEntity findByEmail(LoginRequestDTO loginReq){
