@@ -24,6 +24,12 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
+ @ExceptionHandler(ResourceNotFound.class)
+    public ResponseEntity<Map<String,Object>> handleNotFound(ResourceNotFound ex){
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> fieldErrors = new HashMap<>();
@@ -53,4 +59,6 @@ public class GlobalExceptionHandler {
         body.put("error", message);
         return ResponseEntity.status(status).body(body);
     }
+
+    
 }

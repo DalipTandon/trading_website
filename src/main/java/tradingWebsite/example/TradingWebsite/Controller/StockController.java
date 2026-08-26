@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import tradingWebsite.example.TradingWebsite.DTO.StockResponseDTO;
 import tradingWebsite.example.TradingWebsite.Entity.StockEntity;
 import tradingWebsite.example.TradingWebsite.Repository.StockRepository;
 
@@ -17,8 +18,19 @@ public class StockController {
 
     private final StockRepository stockRepo;
     @GetMapping("/getAllStocks")
-    private List<StockEntity> getAllStocks(){
-        return stockRepo.findAll();
+    private List<StockResponseDTO> getAllStocks(){
+        // return stockRepo.findAll();
+
+        return stockRepo.findAll().stream()
+               .map(stock-> new StockResponseDTO(
+                stock.getId(),
+                stock.getSymbol(),
+                stock.getCompanyName(),
+                stock.getExchange(),
+                stock.getSector(),
+                stock.getIsActive()
+
+               )).toList();
     }
 
 }
