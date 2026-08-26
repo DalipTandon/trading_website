@@ -22,7 +22,10 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http ) throws Except
             .csrf(csrf->csrf.disable())
             .authorizeHttpRequests(auth->auth
                 .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/api/stocks/**").permitAll()
+                .anyRequest().permitAll()
+                // .anyRequest().authenticated()
+
 
             );
             return http.build();

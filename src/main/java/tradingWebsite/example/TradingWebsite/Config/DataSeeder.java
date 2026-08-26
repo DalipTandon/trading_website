@@ -15,19 +15,20 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String...args){
         if (stockRepo.count() == 0) {
-            seedStock("RELIANCE", "Reliance Industries", "NSE", "Energy");
-            seedStock("TCS", "Tata Consultancy Services", "NSE", "IT");
-            seedStock("INFY", "Infosys", "NSE", "IT");
-            seedStock("HDFCBANK", "HDFC Bank", "NSE", "Banking");
-            seedStock("ICICIBANK", "ICICI Bank", "NSE", "Banking");
+            seedStock("RELIANCE", "Reliance Industries", "NSE", "Energy",true);
+            seedStock("TCS", "Tata Consultancy Services", "NSE", "IT",true);
+            seedStock("INFY", "Infosys", "NSE", "IT",false);
+            seedStock("HDFCBANK", "HDFC Bank", "NSE", "Banking",true);
+            seedStock("ICICIBANK", "ICICI Bank", "NSE", "Banking",false);
         }
     }
-    private void seedStock(String symbol, String name, String exchange, String sector) {
+    private void seedStock(String symbol, String name, String exchange, String sector,Boolean isActive) {
         StockEntity stock = new StockEntity();
         stock.setSymbol(symbol);
         stock.setCompanyName(name);
         stock.setExchange(exchange);
         stock.setSector(sector);
+        stock.setIsActive(isActive);
         stockRepo.save(stock);
     }
 }
