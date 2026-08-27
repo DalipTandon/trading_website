@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import tradingWebsite.example.TradingWebsite.DTO.StockResponseDTO;
-import tradingWebsite.example.TradingWebsite.Entity.StockEntity;
+// import tradingWebsite.example.TradingWebsite.Entity.StockEntity;
 import tradingWebsite.example.TradingWebsite.Repository.StockRepository;
 
 @RestController

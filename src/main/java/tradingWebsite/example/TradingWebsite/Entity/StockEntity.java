@@ -1,5 +1,6 @@
 package tradingWebsite.example.TradingWebsite.Entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -33,6 +34,9 @@ public class StockEntity {
     private String exchange;
 
     private String sector;
+
+    @Column(nullable=false,precision =15,scale =2)
+    private BigDecimal currentPrice=BigDecimal.valueOf(100.00);
 
     @Column(nullable = false)
     private Boolean isActive;
