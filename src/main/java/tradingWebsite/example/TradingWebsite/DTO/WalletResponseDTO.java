@@ -16,5 +16,5 @@ public class WalletResponseDTO {
     private String email;
     private BigDecimal balance;
     private BigDecimal lockedBalance;
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }
