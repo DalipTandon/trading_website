@@ -24,10 +24,15 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
- @ExceptionHandler(ResourceNotFound.class)
-    public ResponseEntity<Map<String,Object>> handleNotFound(ResourceNotFound ex){
-        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+ @ExceptionHandler(InsufficientFundException.class)
+    public ResponseEntity<Map<String,Object>> handleInsufficientFunds(InsufficientFundException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
+     @ExceptionHandler(InsufficientHoldingsException.class)
+    public ResponseEntity<Map<String,Object>> handleInsufficientHoldings(InsufficientHoldingsException ex){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
 
 
   @ExceptionHandler(MethodArgumentNotValidException.class)

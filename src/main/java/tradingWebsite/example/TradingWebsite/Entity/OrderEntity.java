@@ -3,7 +3,7 @@ package tradingWebsite.example.TradingWebsite.Entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.Collate;
+// import org.hibernate.annotations.Collate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
