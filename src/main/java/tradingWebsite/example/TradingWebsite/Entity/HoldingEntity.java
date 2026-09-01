@@ -38,5 +38,8 @@ public class HoldingEntity {
     private BigDecimal avgBuyPrice=BigDecimal.ZERO;
 
     @Column(nullable = false)
+    private Integer quantity;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt=LocalDateTime.now();
 }
