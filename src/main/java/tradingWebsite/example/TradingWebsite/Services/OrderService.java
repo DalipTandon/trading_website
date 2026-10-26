@@ -3,9 +3,12 @@ package tradingWebsite.example.TradingWebsite.Services;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Service;
+
 // import org.springframework.cglib.core.Local;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import tradingWebsite.example.TradingWebsite.DTO.OrderResponseDTO;
 import tradingWebsite.example.TradingWebsite.DTO.PlaceOrderRequestDTO;
 import tradingWebsite.example.TradingWebsite.Entity.HoldingEntity;
@@ -24,6 +27,8 @@ import tradingWebsite.example.TradingWebsite.Repository.TransactionRepository;
 import tradingWebsite.example.TradingWebsite.Repository.UserRepository;
 import tradingWebsite.example.TradingWebsite.Repository.WalletRepository;
 
+@Service 
+@AllArgsConstructor 
 public class OrderService {
     private OrderRepository orderRepo;
     private StockRepository stockRepo;
@@ -40,7 +45,7 @@ public class OrderService {
         StockEntity stock=stockRepo.findBySymbol(orderPlace.getSymbol())
                         .orElseThrow(()->new ResourceNotFound("Stock not found"));
 
-        WalletEntity wallet=walletRepo.findById(userId)
+        WalletEntity wallet=walletRepo.findByUserId(userId)
                         .orElseThrow(()->new ResourceNotFound("Wallet not found"));
         BigDecimal executionPrice=stock.getCurrentPrice();
         BigDecimal totalCost=executionPrice.multiply(BigDecimal.valueOf(orderPlace.getQuantity()));
@@ -66,7 +71,8 @@ public class OrderService {
         HoldingEntity holding=holdingRepo.findByUserIdAndStockId(userId, stock.getId())
                                .orElseGet(()->{
                                 HoldingEntity newHolding=new HoldingEntity();
-                                newHolding.setId(userId);
+                                // newHolding.setId(userId);
+                                newHolding.setUser(user);
                                 newHolding.setStock(stock);
                                 newHolding.setAvgBuyPrice(BigDecimal.ZERO);
                                 newHolding.setQuantity(0);
