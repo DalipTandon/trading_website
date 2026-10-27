@@ -30,4 +30,9 @@ public class OrderController {
         OrderResponseDTO order=orderServ.placeMarketBuyOrder(userId, request);
         return  ResponseEntity.status(HttpStatus.CREATED).body(order);
     } 
+    @PostMapping ("/sell")
+    public  ResponseEntity<OrderResponseDTO> sellOrder(@RequestHeader ("X-User-Id") Long userId , @Valid @RequestBody  PlaceOrderRequestDTO request){
+        OrderResponseDTO order=orderServ.placeMarketSellOrder(userId,request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
+    }
 }

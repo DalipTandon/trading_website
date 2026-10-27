@@ -3,6 +3,7 @@ package tradingWebsite.example.TradingWebsite.Services;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 // import org.springframework.cglib.core.Local;
@@ -113,5 +114,67 @@ public class OrderService {
             savedOrder.getStatus(),
             savedOrder.getExecutedAt()
         );
+    }
+
+    @Transactional 
+    public OrderResponseDTO placeMarketSellOrder(Long userId, PlaceOrderRequestDTO orderPlace){
+        UserEntity user=userRepo.findById(userId).orElseThrow(()->new ResourceNotFound("USER NOT FOUND"));
+
+        StockEntity stock=stockRepo.findBySymbol(orderPlace.getSymbol()).orElseThrow(()->new ResourceNotFound("STOCK NOT FOUND"));
+
+        WalletEntity wallet=walletRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFound("NO WALLER FOUND"));
+        HoldingEntity holding=holdingRepo.findByUserIdAndStockId(userId,stock.getId()).orElseThrow(()->new ResourceNotFound("HOLDING NOT FOUND"));
+        int sellQuantity=orderPlace.getQuantity();
+        if(sellQuantity<=0){
+          throw new IllegalArgumentException(
+                "Sell quantity must be greater than zero");
+        }
+        if(holding.getQuantity()<sellQuantity){
+            throw new IllegalArgumentException(
+                "Insufficient stock holdings");
+        }
+        BigDecimal executionPrice=stock.getCurrentPrice();
+        BigDecimal totalSellingValue=executionPrice.multiply(BigDecimal.valueOf(sellQuantity));
+
+        int remainingHolding=holding.getQuantity()-sellQuantity;
+        holding.setQuantity(remainingHolding);
+        holdingRepo.save(holding);
+
+        wallet.setBalance(wallet.getBalance().add(totalSellingValue));
+        walletRepo.save(wallet);
+
+        OrderEntity order=new OrderEntity();
+        order.setUser(user);
+        order.setStock(stock);
+        order.setOrderType("MARKET");
+        order.setSide("SELL");
+        order.setQuantity(sellQuantity);
+        order.setLimitPrice(totalSellingValue);
+        order.setStatus("SUCCESSFUL");
+        order.setExecutedPrice(executionPrice);
+        order.setExecutedAt(LocalDateTime.now());
+
+        OrderEntity savedOrder=orderRepo.save(order);
+         TransactionEntity transaction = new TransactionEntity();
+
+        transaction.setUser(user);
+        transaction.setOrder(savedOrder);
+        transaction.setType("SELL");
+        transaction.setStatus("SUCCESS");
+        transaction.setAmount(totalSellingValue);
+        transaction.setBalanceAfter(wallet.getBalance());
+
+      transactionRepo.save(transaction);
+
+         return new OrderResponseDTO(
+            savedOrder.getId(),
+            stock.getSymbol(),
+            savedOrder.getOrderType(),
+            savedOrder.getSide(),
+            savedOrder.getQuantity(),
+            savedOrder.getExecutedPrice(),
+            savedOrder.getStatus(),
+            savedOrder.getExecutedAt()
+    );
     }
 }
