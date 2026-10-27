@@ -24,6 +24,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http ) throws Except
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/stocks/**").permitAll()
                 .requestMatchers("/api/orders/**").permitAll()
+                // .requestMatchers("/api/holdings/**").authenticated()
                 .anyRequest().permitAll()
                 // .anyRequest().authenticated()
 
